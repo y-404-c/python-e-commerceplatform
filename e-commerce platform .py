@@ -24,8 +24,7 @@ snapshot = df['InvoiceDate'].max() + dt.timedelta(days=1)
 rfm = df.groupby('CustomerID').agg(
     Recency=('InvoiceDate', lambda x: (snapshot - x.max()).days),
     Frequency=('InvoiceNo', 'nunique'),
-    Monetary=('TotalPrice', 'sum')
-)
+    Monetary=('TotalPrice', 'sum'))
 
 rfm['R_score'] = pd.qcut(rfm['Recency'], 4, labels=[4,3,2,1])
 rfm['F_score'] = pd.qcut(rfm['Frequency'].rank(method='first'), 4, labels=[1,2,3,4])
@@ -55,8 +54,7 @@ print(f"\n帕累托分析：{top80}/{len(product_sales)} 种商品贡献了80%�
 basket_stats = df.groupby('InvoiceNo').agg(
     商品种类数=('Description', 'nunique'),
     商品数量=('Quantity', 'sum'),
-    订单金额=('TotalPrice', 'sum')
-)
+    订单金额=('TotalPrice', 'sum'))
 print(f"平均客单价: £{basket_stats['订单金额'].mean():.2f}，每单平均 {basket_stats['商品种类数'].mean():.1f} 种商品")
 
 # 6. Apriori 关联规则
@@ -122,4 +120,4 @@ plt.show()
 rfm.to_csv('rfm_result.csv', index=False)
 product_sales.to_csv('product_sales.csv')
 rules.to_csv('association_rules.csv', index=False)
-print("\n 分析完成，图表已保存。")
+
